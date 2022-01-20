@@ -25,7 +25,7 @@ impl Client {
 /// Runs the solution
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = io::BufReader::new(get_filename()?);
-    let clients: Vec<Client> = parse_input(&mut reader)?;
+    let (clients, addable): (Vec<Client>, Ing) = parse_input(&mut reader)?;
 
     // Debug
     println!("{}", clients.len());
@@ -46,18 +46,19 @@ fn get_filename() -> Result<fs::File, io::Error> {
     fs::File::open(format!("{}{}", INPUT_DIRECTORY, filename))
 }
 
-/// Parses input into a list of clients.
+/// Parses input into a list of clients and hashset of addable ingredients.
 ///
 /// This function takes a [`BufReader<File>`](`std::io::BufReader<std::fs::File>`) as a parameter.
-/// The file being read is the input file.
+/// The file being read is either the one provided via command line or the [`DEFAULT_INPUT`](default).
 fn parse_input(
     reader: &mut io::BufReader<fs::File>,
-) -> Result<Vec<Client>, Box<dyn std::error::Error>> {
+) -> Result<(Vec<Client>, Ing), Box<dyn std::error::Error>> {
     let mut buf = String::new();
     reader.read_line(&mut buf)?;
     let number_of_clients: usize = buf.trim().parse()?;
 
     let mut clients: Vec<Client> = Vec::new();
+    let mut addable: Ing = HashSet::new();
     for _ in 0..number_of_clients {
         // gets the ingredients liked by the client
         let mut likes = String::new();
@@ -65,6 +66,7 @@ fn parse_input(
         let mut likes = likes.split(' ');
         let _n_likes = likes.next().unwrap();
         let likes = likes.map(|s| s.to_string()).collect::<HashSet<String>>();
+        addable.extend(likes.iter().cloned());
 
         // gets the ingredients disliked by the client
         let mut dislikes = String::new();
@@ -75,5 +77,5 @@ fn parse_input(
 
         clients.push(Client::new(likes, dislikes));
     }
-    Ok(clients)
+    Ok((clients, addable))
 }
