@@ -77,6 +77,12 @@ pub fn find_pizza(clients: &[Client], addable: Ing) -> Ing {
     todo!()
 }
 
+/// Gets the score of the current pizza
+/// 
+/// This returns the number of clients that will be satisfied by the pizza.
+/// Conditions for being satisfied:
+/// - all of the liked toppings are on the pizza
+/// - all of the disliked toppings are not on the pizza
 pub fn score(clients: &[Client], pizza: &Ing) -> usize {
     clients.iter().fold(0, |a, c| {
         if pizza.is_disjoint(&c.dislikes) && pizza.is_superset(&c.likes) {
