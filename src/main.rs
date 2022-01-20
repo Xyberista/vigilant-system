@@ -16,6 +16,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pizza = find_pizza(&clients, addable);
 
     // output file
-    fs::write("./output.txt", pizza.into_iter().collect::<Vec<_>>().join(" "))?;
+    fs::write(
+        "./output.txt",
+        pizza.into_iter().collect::<Vec<_>>().join(" "),
+    )?;
     Ok(())
 }

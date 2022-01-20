@@ -56,7 +56,7 @@ where
         // gets the ingredients liked by the client
         let mut likes = String::new();
         reader.read_line(&mut likes)?;
-        let mut likes = likes.split(' ');
+        let mut likes = likes.trim().split(' ');
         let _n_likes = likes.next().unwrap();
         let likes = likes.map(|s| s.to_string()).collect::<HashSet<String>>();
         addable.extend(likes.iter().cloned());
@@ -64,7 +64,7 @@ where
         // gets the ingredients disliked by the client
         let mut dislikes = String::new();
         reader.read_line(&mut dislikes)?;
-        let mut dislikes = dislikes.split(' ');
+        let mut dislikes = dislikes.trim().split(' ');
         let _n_dislikes = dislikes.next().unwrap();
         let dislikes = dislikes.map(|s| s.to_string()).collect::<HashSet<String>>();
 
@@ -78,5 +78,25 @@ pub fn find_pizza(clients: &[Client], addable: Ing) -> Ing {
 }
 
 pub fn score(clients: &[Client], pizza: Ing) -> usize {
-    todo!()
+    let mut s = 0;
+    for client in clients {
+        if pizza.is_disjoint(&client.dislikes)
+            && pizza.is_superset(&client.likes)
+        {
+            s += 1;
+        }
+    }
+    s
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_score() {
+        let path = "./input/a_an_example.in.txt";
+        let (clients, addable): (Vec<Client>, Ing) = parse_input(&path).unwrap();
+        assert_eq!(2, score(&clients, addable));
+    }
 }
