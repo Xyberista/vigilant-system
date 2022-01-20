@@ -22,6 +22,7 @@ impl Client {
     }
 }
 
+/// Runs the solution
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = io::BufReader::new(get_filename()?);
     let clients: Vec<Client> = parse_input(&mut reader)?;
@@ -32,6 +33,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+/// Gets the filename of the input file.
+///
 /// Filename is passed through command line, and defaults to the constant [DEFAULT_INPUT].
 fn get_filename() -> Result<fs::File, io::Error> {
     let args = std::env::args().collect::<Vec<String>>();
@@ -43,20 +46,27 @@ fn get_filename() -> Result<fs::File, io::Error> {
     fs::File::open(format!("{}{}", INPUT_DIRECTORY, filename))
 }
 
+/// Parses input into a list of clients.
+///
+/// This function takes a [`BufReader<File>`](`std::io::BufReader<std::fs::File>`) as a parameter.
+/// The file being read is the input file.
 fn parse_input(
     reader: &mut io::BufReader<fs::File>,
 ) -> Result<Vec<Client>, Box<dyn std::error::Error>> {
     let mut buf = String::new();
     reader.read_line(&mut buf)?;
     let number_of_clients: usize = buf.trim().parse()?;
+
     let mut clients: Vec<Client> = Vec::new();
     for _ in 0..number_of_clients {
+        // gets the ingredients liked by the client
         let mut likes = String::new();
         reader.read_line(&mut likes)?;
         let mut likes = likes.split(' ');
         let _n_likes = likes.next().unwrap();
         let likes = likes.map(|s| s.to_string()).collect::<HashSet<String>>();
 
+        // gets the ingredients disliked by the client
         let mut dislikes = String::new();
         reader.read_line(&mut dislikes)?;
         let mut dislikes = dislikes.split(' ');
