@@ -24,26 +24,32 @@ impl Client {
 
 /// Runs the solution
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut reader = io::BufReader::new(get_filename()?);
+    let filename = get_filename();
+    let mut reader = io::BufReader::new(fs::File::open(&filename)?);
     let (clients, addable): (Vec<Client>, Ing) = parse_input(&mut reader)?;
 
     // Debug
     println!("{}", clients.len());
     println!("{:?}", clients[0]);
+
+    let pizza = find_pizza(&clients, addable);
+
+    // output file
+    fs::write(filename.replace(".in", ".out"), pizza.into_iter().collect::<Vec<String>>().join(" "))?;
     Ok(())
 }
 
 /// Gets the filename of the input file.
 ///
 /// Filename is passed through command line, and defaults to the constant [DEFAULT_INPUT].
-fn get_filename() -> Result<fs::File, io::Error> {
+fn get_filename() -> String {
     let args = std::env::args().collect::<Vec<String>>();
     let filename = if let Some(filename) = args.get(1) {
         filename
     } else {
         DEFAULT_INPUT
     };
-    fs::File::open(format!("{}{}", INPUT_DIRECTORY, filename))
+    format!("{}{}", INPUT_DIRECTORY, filename)
 }
 
 /// Parses input into a list of clients and hashset of addable ingredients.
@@ -78,4 +84,12 @@ fn parse_input(
         clients.push(Client::new(likes, dislikes));
     }
     Ok((clients, addable))
+}
+
+fn find_pizza(clients: &[Client], addable: Ing) -> Ing {
+    todo!()
+}
+
+fn score(clients: &[Client], pizza: Ing) -> usize {
+    todo!()
 }
