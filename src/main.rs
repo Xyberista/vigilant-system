@@ -24,6 +24,28 @@ impl Client {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = io::BufReader::new(get_filename()?);
+    let clients: Vec<Client> = parse_input(&mut reader)?;
+
+    // Debug
+    println!("{}", clients.len());
+    println!("{:?}", clients[0]);
+    Ok(())
+}
+
+/// Filename is passed through command line, and defaults to the constant [DEFAULT_INPUT].
+fn get_filename() -> Result<fs::File, io::Error> {
+    let args = std::env::args().collect::<Vec<String>>();
+    let filename = if let Some(filename) = args.get(1) {
+        filename
+    } else {
+        DEFAULT_INPUT
+    };
+    fs::File::open(format!("{}{}", INPUT_DIRECTORY, filename))
+}
+
+fn parse_input(
+    reader: &mut io::BufReader<fs::File>,
+) -> Result<Vec<Client>, Box<dyn std::error::Error>> {
     let mut buf = String::new();
     reader.read_line(&mut buf)?;
     let number_of_clients: usize = buf.trim().parse()?;
@@ -43,16 +65,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         clients.push(Client::new(likes, dislikes));
     }
-    Ok(())
-}
-
-/// Filename is passed through command line, and defaults to the constant [DEFAULT_INPUT].
-fn get_filename() -> Result<fs::File, io::Error> {
-    let args = std::env::args().collect::<Vec<String>>();
-    let filename = if let Some(filename) = args.get(1) {
-        filename
-    } else {
-        DEFAULT_INPUT
-    };
-    fs::File::open(format!("{}{}", INPUT_DIRECTORY, filename))
+    Ok(clients)
 }
