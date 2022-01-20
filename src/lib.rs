@@ -77,16 +77,14 @@ pub fn find_pizza(clients: &[Client], addable: Ing) -> Ing {
     todo!()
 }
 
-pub fn score(clients: &[Client], pizza: Ing) -> usize {
-    let mut s = 0;
-    for client in clients {
-        if pizza.is_disjoint(&client.dislikes)
-            && pizza.is_superset(&client.likes)
-        {
-            s += 1;
+pub fn score(clients: &[Client], pizza: &Ing) -> usize {
+    clients.iter().fold(0, |a, c| {
+        if pizza.is_disjoint(&c.dislikes) && pizza.is_superset(&c.likes) {
+            a + 1
+        } else {
+            a
         }
-    }
-    s
+    })
 }
 
 #[cfg(test)]
@@ -97,6 +95,6 @@ mod test {
     fn test_score() {
         let path = "./input/a_an_example.in.txt";
         let (clients, addable): (Vec<Client>, Ing) = parse_input(&path).unwrap();
-        assert_eq!(2, score(&clients, addable));
+        assert_eq!(2, score(&clients, &addable));
     }
 }

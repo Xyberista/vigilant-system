@@ -1,10 +1,16 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use std::io;
-use std::io::prelude::*;
 
 use practice::*;
 
-fn bench_score(c: &mut Criterion) {}
+fn bench_score(c: &mut Criterion) {
+    let path = "./input/e_elaborate.in.txt";
+    let (clients, addable): (Vec<Client>, Ing) = parse_input(&path).unwrap();
+    c.bench_function("score", |b| b.iter(|| score(&clients, &addable)));
+}
 
-criterion_group!(benches, bench_score);
+criterion_group!(
+    name = benches; 
+    config = Criterion::default().sample_size(250);
+    targets = bench_score
+);
 criterion_main!(benches);
