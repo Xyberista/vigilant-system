@@ -1,6 +1,6 @@
 # Description
 
-Rustkkk solution for 2022 Google Hashcode Practice Round.
+Rust solution for 2022 Google Hashcode Practice Round.
 Input is places in `./input` relative to the project root.
 
 ## Running
