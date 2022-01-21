@@ -12,8 +12,8 @@ pub type Ing = HashSet<String>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Client {
-    likes: Ing,
-    dislikes: Ing,
+    pub likes: Ing,
+    pub dislikes: Ing,
 }
 
 impl Client {
@@ -39,12 +39,12 @@ pub fn get_file_path(filename: Option<&str>) -> String {
     format!("{}{}", INPUT_DIRECTORY, filename)
 }
 
-/// Parses input into a list of clients and hashset of addable ingredients.
+/// Parses input into a list of clients and hashset of addable ingredients and removeable ingredients.
 ///
 /// This function takes a path as a paramter.
 /// The file being read is either the one provided via command line
 /// or the [default](`DEFAULT_INPUT`).
-pub fn parse_input<S>(path: S) -> Result<(Vec<Client>, Ing), Box<dyn std::error::Error>>
+pub fn parse_input<S>(path: S) -> Result<(Vec<Client>, Ing, Ing), Box<dyn std::error::Error>>
 where
     S: AsRef<std::path::Path>,
 {
@@ -55,6 +55,7 @@ where
 
     let mut clients: Vec<Client> = Vec::new();
     let mut addable: Ing = HashSet::new();
+    let mut removeable: Ing = HashSet::new();
     for _ in 0..number_of_clients {
         // gets the ingredients liked by the client
         let mut likes = String::new();
@@ -70,20 +71,21 @@ where
         let mut dislikes = dislikes.trim().split(' ');
         let _n_dislikes = dislikes.next().unwrap();
         let dislikes = dislikes.map(|s| s.to_string()).collect::<HashSet<String>>();
+        removeable.extend(dislikes.iter().cloned());
 
         clients.push(Client::new(likes, dislikes));
     }
-    Ok((clients, addable))
+    Ok((clients, addable, removeable))
 }
 
 /// Finds the best pizza with the given algorithm
 ///
 /// The algorithms are specified in the module [`algorithms`]
-pub fn find_pizza<F>(clients: &[Client], addable: &Ing, algorithm: F) -> Ing
+pub fn find_pizza<F>(clients: &[Client], addable: &Ing, removeable: &Ing, algorithm: F) -> Ing
 where
-    F: Fn(&[Client], &Ing) -> Ing,
+    F: Fn(&[Client], &Ing, &Ing) -> Ing,
 {
-    algorithm(clients, addable)
+    algorithm(clients, addable, removeable)
 }
 
 /// Gets the score of the current pizza
@@ -109,7 +111,7 @@ mod test {
     #[test]
     fn test_score() {
         let path = "./input/a_an_example.in.txt";
-        let (clients, addable): (Vec<Client>, Ing) = parse_input(&path).unwrap();
+        let (clients, addable, _removeable): (Vec<Client>, Ing, Ing) = parse_input(&path).unwrap();
         assert_eq!(2, score(&clients, &addable));
     }
 }

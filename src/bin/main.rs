@@ -19,13 +19,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let path = get_file_path(None);
-    let (clients, addable): (Vec<Client>, Ing) = parse_input(&path)?;
+    let (clients, addable, removeable): (Vec<Client>, Ing, Ing) = parse_input(&path)?;
 
     // Debug
     println!("{}", clients.len());
     println!("{:?}", clients[0]);
 
-    let pizza = find_pizza(&clients, &addable, algorithms::all);
+    let pizza = find_pizza(&clients, &addable, &removeable, algorithms::all);
     let len = pizza.len();
 
     // output file
@@ -40,9 +40,10 @@ fn run_all() -> Result<(), Box<dyn std::error::Error>> {
     if let Ok(()) = fs::create_dir("./output/") {}
     for file in INPUT_FILES {
         let path = get_file_path(Some(file));
-        let (clients, addable): (Vec<Client>, Ing) = parse_input(&path)?;
+        let (clients, addable, removeable): (Vec<Client>, Ing, Ing) = parse_input(&path)?;
 
-        let pizza = find_pizza(&clients, &addable, algorithms::one_client);
+        // let pizza = find_pizza(&clients, &addable, algorithms::two_client);
+        let pizza = find_pizza(&clients, &addable, &removeable, algorithms::one_client);
         let len = pizza.len();
 
         println!("Score: {}", score(&clients, &pizza));
