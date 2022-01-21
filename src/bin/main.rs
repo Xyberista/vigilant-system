@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::fs;
 
 use lib::*;
@@ -35,9 +37,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn run_all() -> Result<(), Box<dyn std::error::Error>> {
-    if let Ok(()) = fs::create_dir("./output/") {
-        ()
-    }
+    if let Ok(()) = fs::create_dir("./output/") {}
     for file in INPUT_FILES {
         let path = get_file_path(Some(file));
         let (clients, addable): (Vec<Client>, Ing) = parse_input(&path)?;
