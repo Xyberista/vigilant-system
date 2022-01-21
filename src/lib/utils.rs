@@ -1,9 +1,9 @@
+use super::algorithms;
 use std::{
     collections::HashSet,
     fs,
     io::{self, prelude::*},
 };
-use super::algorithms;
 
 pub const INPUT_DIRECTORY: &str = "./input/";
 pub const DEFAULT_INPUT: &str = "a_an_example.in.txt";
@@ -26,10 +26,13 @@ impl Client {
 /// Gets the path to the input file
 ///
 /// Filename is passed through command line, and defaults to the constant [`DEFAULT_INPUT`].
+/// Filename can also be passed as a parameter, defaulting to `None`.
 /// The directory is provided by the constant [`INPUT_DIRECTORY`].
-pub fn get_file_path() -> String {
+pub fn get_file_path(filename: Option<&str>) -> String {
     let args = std::env::args().collect::<Vec<String>>();
-    let filename = if let Some(filename) = args.get(1) {
+    let filename = if let Some(filename) = filename {
+        filename
+    } else if let Some(filename) = args.get(1) {
         filename
     } else {
         DEFAULT_INPUT
@@ -75,14 +78,17 @@ where
 }
 
 /// Finds the best pizza with the given algorithm
-/// 
+///
 /// The algorithms are specified in the module [`algorithms`]
-pub fn find_pizza(clients: &[Client], addable: &Ing) -> Ing {
-    algorithms::basic(clients, addable)
+pub fn find_pizza<F>(clients: &[Client], addable: &Ing, algorithm: F) -> Ing
+where
+    F: Fn(&[Client], &Ing) -> Ing,
+{
+    algorithm(clients, addable)
 }
 
 /// Gets the score of the current pizza
-/// 
+///
 /// This returns the number of clients that will be satisfied by the pizza.
 /// Conditions for being satisfied:
 /// - all of the liked toppings are on the pizza

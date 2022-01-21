@@ -9,7 +9,7 @@ fn bench_score(c: &mut Criterion) {
 }
 
 criterion_group!(
-    name = benches; 
+    name = benches;
     config = Criterion::default().sample_size(250);
     targets = bench_score
 );
