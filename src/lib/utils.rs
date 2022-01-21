@@ -3,6 +3,7 @@ use std::{
     fs,
     io::{self, prelude::*},
 };
+use super::algorithms;
 
 pub const INPUT_DIRECTORY: &str = "./input/";
 pub const DEFAULT_INPUT: &str = "a_an_example.in.txt";
@@ -73,8 +74,11 @@ where
     Ok((clients, addable))
 }
 
-pub fn find_pizza(clients: &[Client], addable: Ing) -> Ing {
-    todo!()
+/// Finds the best pizza with the given algorithm
+/// 
+/// The algorithms are specified in the module [`algorithms`]
+pub fn find_pizza(clients: &[Client], addable: &Ing) -> Ing {
+    algorithms::basic(clients, addable)
 }
 
 /// Gets the score of the current pizza

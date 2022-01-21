@@ -1,6 +1,6 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 
-use practice::*;
+use lib::*;
 
 fn bench_score(c: &mut Criterion) {
     let path = "./input/e_elaborate.in.txt";

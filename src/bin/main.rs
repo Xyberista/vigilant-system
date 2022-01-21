@@ -1,5 +1,3 @@
-mod lib;
-
 use std::fs;
 
 use lib::*;
@@ -13,7 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", clients.len());
     println!("{:?}", clients[0]);
 
-    let pizza = find_pizza(&clients, addable);
+    let pizza = find_pizza(&clients, &addable);
 
     // output file
     fs::write(
