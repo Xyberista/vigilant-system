@@ -4,7 +4,7 @@ use lib::*;
 
 fn bench_score(c: &mut Criterion) {
     let path = "./input/e_elaborate.in.txt";
-    let (clients, addable): (Vec<Client>, Ing) = parse_input(&path).unwrap();
+    let (clients, addable, removeable): (Vec<Client>, Ing, Ing) = parse_input(&path).unwrap();
     c.bench_function("score", |b| b.iter(|| score(&clients, &addable)));
 }
 

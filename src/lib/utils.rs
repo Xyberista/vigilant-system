@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::{
     collections::HashSet,
     fs,
@@ -95,13 +96,19 @@ where
 /// - all of the liked toppings are on the pizza
 /// - all of the disliked toppings are not on the pizza
 pub fn score(clients: &[Client], pizza: &Ing) -> usize {
-    clients.iter().fold(0, |a, c| {
-        if pizza.is_disjoint(&c.dislikes) && pizza.is_superset(&c.likes) {
-            a + 1
-        } else {
-            a
-        }
-    })
+    clients
+        .par_iter()
+        .fold(
+            || 0_usize,
+            |a, c| {
+                if pizza.is_disjoint(&c.dislikes) && pizza.is_superset(&c.likes) {
+                    a + 1
+                } else {
+                    a
+                }
+            },
+        )
+        .sum()
 }
 
 #[cfg(test)]
