@@ -1,5 +1,5 @@
 pub mod all;
-pub mod basic;
+pub mod one;
 
-pub use all::all;
-pub use basic::basic;
+pub use all::*;
+pub use one::*;

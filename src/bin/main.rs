@@ -42,7 +42,7 @@ fn run_all() -> Result<(), Box<dyn std::error::Error>> {
         let path = get_file_path(Some(file));
         let (clients, addable): (Vec<Client>, Ing) = parse_input(&path)?;
 
-        let pizza = find_pizza(&clients, &addable, algorithms::all);
+        let pizza = find_pizza(&clients, &addable, algorithms::one_client);
         let len = pizza.len();
 
         println!("Score: {}", score(&clients, &pizza));
