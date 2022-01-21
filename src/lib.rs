@@ -24,7 +24,7 @@ impl Client {
 
 /// Gets the path to the input file
 ///
-/// Filename is passed through command line, and defaults to the constant [DEFAULT_INPUT].
+/// Filename is passed through command line, and defaults to the constant [`DEFAULT_INPUT`].
 /// The directory is provided by the constant [`INPUT_DIRECTORY`].
 pub fn get_file_path() -> String {
     let args = std::env::args().collect::<Vec<String>>();
@@ -40,7 +40,7 @@ pub fn get_file_path() -> String {
 ///
 /// This function takes a path as a paramter.
 /// The file being read is either the one provided via command line
-/// or the [`DEFAULT_INPUT`](default).
+/// or the [default](`DEFAULT_INPUT`).
 pub fn parse_input<S>(path: S) -> Result<(Vec<Client>, Ing), Box<dyn std::error::Error>>
 where
     S: AsRef<std::path::Path>,
