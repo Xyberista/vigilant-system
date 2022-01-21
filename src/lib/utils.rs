@@ -1,6 +1,6 @@
+use ahash::AHashSet;
 use rayon::prelude::*;
 use std::{
-    collections::HashSet,
     fs,
     io::{self, prelude::*},
 };
@@ -9,7 +9,7 @@ pub const INPUT_DIRECTORY: &str = "./input/";
 pub const DEFAULT_INPUT: &str = "a_an_example.in.txt";
 
 /// Ingredients type. (Ing short for Ingredients)
-pub type Ing = HashSet<String>;
+pub type Ing = AHashSet<String>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Client {
@@ -40,7 +40,7 @@ pub fn get_file_path(filename: Option<&str>) -> String {
     format!("{}{}", INPUT_DIRECTORY, filename)
 }
 
-/// Parses input into a list of clients and hashset of addable ingredients and removeable ingredients.
+/// Parses input into a list of clients and AHashSet of addable ingredients and removeable ingredients.
 ///
 /// This function takes a path as a paramter.
 /// The file being read is either the one provided via command line
@@ -55,15 +55,15 @@ where
     let number_of_clients: usize = buf.trim().parse()?;
 
     let mut clients: Vec<Client> = Vec::new();
-    let mut addable: Ing = HashSet::new();
-    let mut removeable: Ing = HashSet::new();
+    let mut addable: Ing = AHashSet::new();
+    let mut removeable: Ing = AHashSet::new();
     for _ in 0..number_of_clients {
         // gets the ingredients liked by the client
         let mut likes = String::new();
         reader.read_line(&mut likes)?;
         let mut likes = likes.trim().split(' ');
         let _n_likes = likes.next().unwrap();
-        let likes = likes.map(|s| s.to_string()).collect::<HashSet<String>>();
+        let likes = likes.map(|s| s.to_string()).collect::<AHashSet<String>>();
         addable.extend(likes.iter().cloned());
 
         // gets the ingredients disliked by the client
@@ -71,7 +71,9 @@ where
         reader.read_line(&mut dislikes)?;
         let mut dislikes = dislikes.trim().split(' ');
         let _n_dislikes = dislikes.next().unwrap();
-        let dislikes = dislikes.map(|s| s.to_string()).collect::<HashSet<String>>();
+        let dislikes = dislikes
+            .map(|s| s.to_string())
+            .collect::<AHashSet<String>>();
         removeable.extend(dislikes.iter().cloned());
 
         clients.push(Client::new(likes, dislikes));

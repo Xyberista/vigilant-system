@@ -43,7 +43,7 @@ fn run_all() -> Result<(), Box<dyn std::error::Error>> {
         let (clients, addable, removeable): (Vec<Client>, Ing, Ing) = parse_input(&path)?;
 
         // let pizza = find_pizza(&clients, &addable, algorithms::two_client);
-        let pizza = find_pizza(&clients, &addable, &removeable, algorithms::two_client);
+        let pizza = find_pizza(&clients, &addable, &removeable, algorithms::one_client);
         let len = pizza.len();
 
         println!("Score: {}", score(&clients, &pizza));

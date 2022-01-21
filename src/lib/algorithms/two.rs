@@ -1,5 +1,5 @@
+use ahash::AHashSet;
 use rayon::prelude::*;
-use std::collections::HashSet;
 
 use super::super::*;
 
@@ -15,7 +15,7 @@ pub fn two_client(clients: &[Client], addable: &Ing, _removeable: &Ing) -> Ing {
                     let pizza = addable
                         .difference(&disliked)
                         .cloned()
-                        .collect::<HashSet<String>>();
+                        .collect::<AHashSet<String>>();
                     (score(clients, &pizza), pizza)
                 })
                 .max_by(|a, b| a.0.cmp(&b.0))

@@ -14,7 +14,7 @@ path = "src/bin/main.rs"
 
 
 [dev-dependencies]
-criterion = { version = "0.3.0", features = ["html_reports"]}
+criterion = { version = "0.3.5", features = ["html_reports"]}
 
 [[bench]]
 name = "benchmark"
@@ -22,3 +22,4 @@ harness = false
 
 [dependencies]
 rayon = "1.5.1"
+ahash = "0.7.6"
