@@ -2,6 +2,7 @@
 name = "practice"
 version = "0.1.0"
 edition = "2021"
+authors = ["Tony Chen <xygerista@users.noreply.github.com>"]
 
 [lib]
 name = "lib"
